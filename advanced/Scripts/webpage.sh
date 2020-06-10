@@ -17,7 +17,7 @@ readonly FTLconf="/etc/pihole/pihole-FTL.conf"
 # 03 -> wildcards
 readonly dhcpstaticconfig="/etc/dnsmasq.d/04-pihole-static-dhcp.conf"
 readonly PI_HOLE_BIN_DIR="/usr/local/bin"
-readonly dnscustomfile="/etc/pihole/custom.list"
+readonly dnscustomfile="/etc/dnsmasq.d/05-custom-dns.conf"
 
 readonly gravityDBfile="/etc/pihole/gravity.db"
 
@@ -603,7 +603,7 @@ AddCustomDNSAddress() {
 
     ip="${args[2]}"
     host="${args[3]}"
-	echo "${ip} ${host}" >> "${dnscustomfile}"
+	echo "address=/${host}/${ip}" >> "${dnscustomfile}"
 
     # Restart dnsmasq to load new custom DNS entries
     RestartDNS
@@ -614,7 +614,7 @@ RemoveCustomDNSAddress() {
 
     ip="${args[2]}"
     host="${args[3]}"
-    sed -i "/${ip} ${host}/d" "${dnscustomfile}"
+    sed -i "/address=\/${host}\/${ip}/d" "${dnscustomfile}"
 
     # Restart dnsmasq to update removed custom DNS entries
     RestartDNS
